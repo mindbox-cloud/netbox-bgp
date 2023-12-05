@@ -31,7 +31,7 @@ class SerializedPKRelatedField(PrimaryKeyRelatedField):
 
 class RoutingPolicySerializer(NetBoxModelSerializer):
     class Meta:
-        model = RoutingPolicy        
+        model = RoutingPolicy
         fields = ['id', 'name', 'description']
 
 
@@ -40,7 +40,7 @@ class NestedRoutingPolicySerializer(WritableNestedSerializer):
 
     class Meta:
         model = RoutingPolicy
-        fields = ['id', 'url', 'name', 'display', 'description']        
+        fields = ['id', 'url', 'name', 'display', 'description']
         validators = []
 
 
@@ -132,7 +132,7 @@ class NestedBGPSessionSerializer(WritableNestedSerializer):
 
     class Meta:
         model = BGPSession
-        fields = ['id', 'url', 'name', 'description']
+        fields = ['id', 'url', 'name', 'display', 'description']
         validators = []
 
 
@@ -170,7 +170,7 @@ class NestedPrefixListSerializer(WritableNestedSerializer):
 class PrefixListSerializer(NetBoxModelSerializer):
     class Meta:
         model = PrefixList
-        fields = ['id', 'name', 'description', 'family']
+        fields = ['id', 'name', 'description', 'display', 'family']
 
 
 class RoutingPolicyRuleSerializer(NetBoxModelSerializer):
@@ -189,15 +189,19 @@ class RoutingPolicyRuleSerializer(NetBoxModelSerializer):
         allow_null=True,
         many=True
     )
-    
+
 
     class Meta:
         model = RoutingPolicyRule
-        fields = ['id', 'index', 'action', 'match_ip_address', 'routing_policy', 'match_community']
+        fields = [
+            'id', 'index', 'display' ,'action', 'match_ip_address',
+            'routing_policy', 'match_community', 'match_custom', 'set_actions',
+            'match_ipv6_address', 'description'
+        ]
 
 
 class PrefixListRuleSerializer(NetBoxModelSerializer):
-    prefix_list = NestedPrefixListSerializer()  
+    prefix_list = NestedPrefixListSerializer()
     prefix = NestedPrefixSerializer(required=False, allow_null=True)
     prefix_custom = IPNetworkField(required=False, allow_null=True)
 
